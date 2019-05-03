@@ -2327,7 +2327,9 @@ push_peer_info(struct buffer *buf, struct tls_session *session)
 
         /* support for Negotiable Crypto Parameters */
         if (session->opt->ncp_enabled
-            && (session->opt->mode == MODE_SERVER || session->opt->pull))
+            && (session->opt->mode == MODE_SERVER || session->opt->pull)
+            && tls_item_in_cipher_list("AES-128-GCM", o->ncp_ciphers)
+            && tls_item_in_cipher_list("AES-256-GCM", o->ncp_ciphers))
         {
             buf_printf(&out, "IV_NCP=2\n");
         }

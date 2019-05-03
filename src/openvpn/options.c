@@ -7663,6 +7663,13 @@ add_option(struct options *options,
     {
         VERIFY_PERMISSION(OPT_P_GENERAL|OPT_P_INSTANCE);
         options->ncp_ciphers = p[1];
+
+        if (!(tls_item_in_cipher_list("AES-128-GCM", o->ncp_ciphers)
+              && tls_item_in_cipher_list("AES-256-GCM", o->ncp_ciphers)))
+        {
+            msg(M_INFO, "Not including AES-128-GCM and AES-256-GCM in ncp-ciphers "
+                "disables annoucing NCP support with IV_NCP=2");
+        }
     }
     else if (streq(p[0], "ncp-disable") && !p[1])
     {
